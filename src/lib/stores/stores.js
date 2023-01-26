@@ -10,10 +10,12 @@ const DEFAULT_TAGS = {
 };
 
 // Set the stored value or a sane default.
-export const content = writable((browser && localStorage.content) || JSON.stringify(DEFAULT_TAGS));
+export const contentStore = writable(
+	(browser && localStorage.content) || JSON.stringify(DEFAULT_TAGS)
+);
 
 // Anytime the store changes, update the local storage value.
-content.subscribe((value) => {
+contentStore.subscribe((value) => {
 	if (browser) return (localStorage.content = value);
 });
 

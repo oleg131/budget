@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<title>Expenses Tracker</title>
 		<meta charset="utf-8" />
 		<link rel="icon" href="./favicon.png" />
 		<meta name="viewport" content="width=device-width" />
 		<meta http-equiv="content-security-policy" content="">
-		<link href="./_app/immutable/assets/_layout-6773755d.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/_layout-0ff41ec0.css" rel="stylesheet">
 		<link href="./_app/immutable/assets/_page-88007d75.css" rel="stylesheet">
-		<link rel="modulepreload" href="./_app/immutable/start-a207466b.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/index-58e015e9.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/singletons-9b5c5d91.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/index-11ed8b23.js">
-		<link rel="modulepreload" href="./_app/immutable/components/pages/_layout.svelte-bd416685.js">
+		<link rel="modulepreload" href="./_app/immutable/start-9339030d.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index-21880e9a.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/singletons-2b5f5a05.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index-10c5655c.js">
+		<link rel="modulepreload" href="./_app/immutable/components/pages/_layout.svelte-8e4012ae.js">
 		<link rel="modulepreload" href="./_app/immutable/modules/pages/_layout.js-9cbb603b.js">
 		<link rel="modulepreload" href="./_app/immutable/chunks/_layout-da46b06b.js">
-		<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-ac38b7cd.js">
+		<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-24787722.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">
@@ -29,106 +30,47 @@
 			<p class="text-xs text-gray-500 dark:text-gray-400">Comma-separated file with a header</p></div>
 		<input id="dropzone-file" type="file" class="hidden"></label></div>
 
-		<div class="grid grid-cols-3 gap-4 font-mono text-white text-sm text-center font-bold leading-6 bg-stripes-fuchsia rounded-lg pt-16"><div><label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date column</label>
+		<div class="grid grid-cols-3 gap-4 font-mono text-sm text-center font-bold leading-6 bg-stripes-fuchsia rounded-lg pt-16"><div><label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date column</label>
 
 	<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></select></div>
 
 
-			<div><label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description column</label>
+				<div class="flex flex-col gap-4"><div><label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description column</label>
 
 	<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></select></div>
 
 
-			<div class="flex flex-col justify-center gap-4"><div><label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount column</label>
+					<div class="flex flex-col items-center justify-center gap-4">
+
+						<div class="relative"><div class="focus:outline-none"><button type="button" class="w-auto cursor-pointer space-x-1 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 transition hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">Add regex
+							</button></div>
+
+	</div></div></div>
+
+				<div class="flex flex-col justify-start gap-4"><div><label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount column</label>
 
 	<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></select></div>
 
 
-				<div class="flex items-center"><input type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+					<div class="flex items-center"><input type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
 	<label for="" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Spendings are negative</label></div>
-				<div class="flex items-center"><input type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+					<div class="flex items-center"><input type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
 	<label for="" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ignore values of opposite sign</label></div></div></div>
 		
-		<div class="pt-16"></div>
-		<div class="pt-16"></div>
-
-		<div class="pt-16"><div class="not-prose relative bg-slate-50 rounded-xl overflow-hidden dark:bg-slate-800/25"><div style="background-position:10px 10px" class="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.5))]"></div>
-				<div class="relative rounded-xl overflow-auto"><div class="shadow-sm overflow-hidden my-8"><table class="border-collapse table-auto w-full"><thead><tr><th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-800 dark:text-slate-200 text-left">Date</th><th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-800 dark:text-slate-200 text-left">Description</th><th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-800 dark:text-slate-200 text-left">Amount</th><th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-800 dark:text-slate-200 text-left">Tags</th></tr></thead>
-							<tbody class="bg-white dark:bg-slate-800"><tr>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">8/21/2022</td>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">Ext Credit Card Debit MAGGY MAID               TUSTIN       CA</td>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">187.00</td>
-										<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400"><div class="svelte-tags-input-layout svelte-974czs"><label for="sti_7gwnp8xvl" class="sr-only svelte-974czs">svelte-tags-input</label>
-
-    <span class="svelte-tags-input-tag svelte-974czs">bills
-                <span class="svelte-tags-input-tag-remove svelte-974czs">×</span>
-            </span>
-    <input type="text" id="sti_7gwnp8xvl" name="svelte-tags-input" class="svelte-tags-input svelte-974czs" placeholder=""  autocomplete="off" value=""></div>
-
-</td></tr><tr>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">8/24/2022</td>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">Ext Credit Card Debit TST* EGG TUCK - KOREAT   LOS ANGELES  CA</td>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">11.94</td>
-										<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400"><div class="svelte-tags-input-layout svelte-974czs"><label for="sti_i9vwkti1w" class="sr-only svelte-974czs">svelte-tags-input</label>
-
-    <span class="svelte-tags-input-tag svelte-974czs">restaurant
-                <span class="svelte-tags-input-tag-remove svelte-974czs">×</span>
-            </span>
-    <input type="text" id="sti_i9vwkti1w" name="svelte-tags-input" class="svelte-tags-input svelte-974czs" placeholder=""  autocomplete="off" value=""></div>
-
-</td></tr><tr>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">8/24/2022</td>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">Ext Credit Card Debit TST* AHGASSI GOPCHANG    LOS ANGELES  CA,</td>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">190.10</td>
-										<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400"><div class="svelte-tags-input-layout svelte-974czs"><label for="sti_rhhyven8g" class="sr-only svelte-974czs">svelte-tags-input</label>
-
-    
-    <input type="text" id="sti_rhhyven8g" name="svelte-tags-input" class="svelte-tags-input svelte-974czs" placeholder=""  autocomplete="off" value=""></div>
-
-</td></tr><tr>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">8/24/2022</td>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">Ext Credit Card Debit GO POCHA                 LOS ANGELES  CA</td>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">88.01</td>
-										<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400"><div class="svelte-tags-input-layout svelte-974czs"><label for="sti_9zndwx2m4" class="sr-only svelte-974czs">svelte-tags-input</label>
-
-    <span class="svelte-tags-input-tag svelte-974czs">pocha
-                <span class="svelte-tags-input-tag-remove svelte-974czs">×</span>
-            </span>
-    <input type="text" id="sti_9zndwx2m4" name="svelte-tags-input" class="svelte-tags-input svelte-974czs" placeholder=""  autocomplete="off" value=""></div>
-
-</td></tr><tr>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">8/25/2022</td>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">Ext Credit Card Debit GO POCHA                 LOS ANGELES  CA</td>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">188.01</td>
-										<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400"><div class="svelte-tags-input-layout svelte-974czs"><label for="sti_mznofvxq7" class="sr-only svelte-974czs">svelte-tags-input</label>
-
-    <span class="svelte-tags-input-tag svelte-974czs">pocha
-                <span class="svelte-tags-input-tag-remove svelte-974czs">×</span>
-            </span>
-    <input type="text" id="sti_mznofvxq7" name="svelte-tags-input" class="svelte-tags-input svelte-974czs" placeholder=""  autocomplete="off" value=""></div>
-
-</td></tr><tr>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">8/26/2022</td>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">Incoming payment</td>
-											<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400">-600.05</td>
-										<td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400"><div class="svelte-tags-input-layout svelte-974czs"><label for="sti_lrricknpu" class="sr-only svelte-974czs">svelte-tags-input</label>
-
-    
-    <input type="text" id="sti_lrricknpu" name="svelte-tags-input" class="svelte-tags-input svelte-974czs" placeholder=""  autocomplete="off" value=""></div>
-
-</td></tr></tbody></table></div></div>
-				<div class="absolute inset-0 pointer-events-none border border-black/5 rounded-xl dark:border-white/5"></div></div></div></div>
+		<div class="pt-16 hidden"></div>
+		<div class="pt-16 hidden"></div>
+		</div>
 </main>
 
 
-		<script type="module" data-sveltekit-hydrate="1kl08vg">
-			import { start } from "./_app/immutable/start-a207466b.js";
+		<script type="module" data-sveltekit-hydrate="17qcl42">
+			import { start } from "./_app/immutable/start-9339030d.js";
 
 			start({
 				env: {},
 				paths: {"assets":"","base":""},
-				target: document.querySelector('[data-sveltekit-hydrate="1kl08vg"]').parentNode,
-				version: "1674727537841",
+				target: document.querySelector('[data-sveltekit-hydrate="17qcl42"]').parentNode,
+				version: "1691279399672",
 				hydrate: {
 					node_ids: [0, 2],
 					data: [null,null],

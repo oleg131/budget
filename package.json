@@ -32,6 +32,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/adapter-static": "^1.0.5",
+		"gh-pages": "^5.0.0",
 		"highcharts": "^10.3.2",
 		"lodash": "^4.17.21",
 		"svelte-tags-input": "^4.0.0"

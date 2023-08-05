@@ -10,6 +10,7 @@
 	import Dropzone from '$lib/Dropzone.svelte';
 	import Select from '$lib/Select.svelte';
 	import Checkbox from '$lib/Checkbox.svelte';
+	import Tooltip from '../lib/Tooltip.svelte';
 
 	const datePos = 0;
 	const descriptionPos = 1;
@@ -33,11 +34,16 @@
 	const settings = JSON.parse($settingsStore);
 	$: $settingsStore = JSON.stringify(settings);
 
+	if (!settings.descriptionRegex) {
+		settings.descriptionRegex = [];
+	}
+
 	let fullHeader;
 	let rawCSV;
 	let selectedTag;
 	let chartCanvas;
 	let timeCanvas;
+	let loaded = false;
 
 	function getFullCSV(rawCSV, settings) {
 		if (!rawCSV) {
@@ -52,10 +58,42 @@
 
 		fullCSV = rawCSV.map((i) => colsToRender.map((x) => i[x]));
 
+		fullCSV.forEach((row) => {
+			row[descriptionPos] = applyRegex(row[descriptionPos], settings.descriptionRegex);
+		});
+
 		return fullCSV;
 	}
 
 	$: fullCSV = getFullCSV(rawCSV, settings);
+
+	function applyRegex(description, descriptionRegex) {
+		for (const regexp of descriptionRegex) {
+			if (regexp) {
+				let matches;
+				try {
+					matches = description.match(regexp);
+				} catch {}
+
+				if (!matches) {
+					continue;
+				}
+				let newDescription = '';
+				for (let index = 0; index < matches.length; index++) {
+					if (index === 0) {
+						continue;
+					}
+					const match = matches[index];
+					newDescription += match;
+				}
+
+				if (newDescription) {
+					description = `${newDescription}`;
+				}
+			}
+		}
+		return description;
+	}
 
 	function getParsedSV(fullCSV, selectedTag) {
 		let parsedCSV = _.cloneDeep(fullCSV);
@@ -89,8 +127,6 @@
 
 		return parsedCSV;
 	}
-
-	$: parsedCSV = getParsedSV(fullCSV, selectedTag);
 
 	function getChartJSON(tags, parsedCSV) {
 		const csvData = [];
@@ -127,7 +163,7 @@
 		}));
 
 		let dataJSON = {
-			colorByPoint: true,
+			colorByPoint: false,
 			data: data.sort((a, b) => b.y - a.y)
 		};
 
@@ -168,6 +204,9 @@
 					},
 					events: {
 						click: function (event) {
+							if (selectedTag) {
+								return;
+							}
 							const tag = data[event.point.index].name;
 							selectedTag = tag;
 						}
@@ -270,12 +309,20 @@
 		};
 	}
 
+	$: loaded =
+		rawCSV &&
+		fullHeader.includes(settings.dateCol) &&
+		fullHeader.includes(settings.descriptionCol) &&
+		fullHeader.includes(settings.amountCol);
+
 	afterUpdate(() => {
 		setTimeout(() => {
 			Highcharts.chart(chartCanvas, chartjson);
 			Highcharts.chart(timeCanvas, timejson);
 		}, 50);
 	});
+
+	$: parsedCSV = getParsedSV(fullCSV, selectedTag);
 </script>
 
 <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900">
@@ -289,24 +336,62 @@
 
 		<Dropzone onChange={upload} />
 
-		<div
-			class="grid grid-cols-3 gap-4 font-mono text-white text-sm text-center font-bold leading-6 bg-stripes-fuchsia rounded-lg pt-16"
-		>
-			<Select label="Date column" options={fullHeader} bind:selected={settings.dateCol} />
-			<Select
-				label="Description column"
-				options={fullHeader}
-				bind:selected={settings.descriptionCol}
-			/>
-			<div class="flex flex-col justify-center gap-4">
-				<Select label="Amount column" options={fullHeader} bind:selected={settings.amountCol} />
-				<Checkbox label="Spendings are negative" bind:checked={settings.spendingsNegative} />
-				<Checkbox
-					label="Ignore values of opposite sign"
-					bind:checked={settings.ignoreOppositeSign}
-				/>
+		{#if rawCSV || 1}
+			<div
+				class="grid grid-cols-3 gap-4 font-mono text-sm text-center font-bold leading-6 bg-stripes-fuchsia rounded-lg pt-16"
+			>
+				<Select label="Date column" options={fullHeader} bind:selected={settings.dateCol} />
+				<div class="flex flex-col gap-4">
+					<Select
+						label="Description column"
+						options={fullHeader}
+						bind:selected={settings.descriptionCol}
+					/>
+					<div class="flex flex-col items-center justify-center gap-4">
+						{#each settings.descriptionRegex as regexp, i}
+							<input
+								type="search"
+								class="w-full rounded-lg border border-gray-400 p-2"
+								value={regexp}
+								on:search={() => {
+									settings.descriptionRegex.splice(i, 1);
+									settings.descriptionRegex = settings.descriptionRegex;
+								}}
+								on:input={(e) => {
+									settings.descriptionRegex[i] = e.target.value;
+									settings.descriptionRegex = settings.descriptionRegex;
+								}}
+							/>
+						{/each}
+
+						<Tooltip
+							text="Apply regex to the description. New description will be the concatenation of all capturing groups. E.g. &quot;.*(COMPANY NAME)&quot;."
+							><button
+								type="button"
+								class="w-auto cursor-pointer space-x-1 rounded-full border border-gray-200 bg-white
+							px-4 py-2 text-sm font-medium text-gray-800 transition hover:border-gray-400
+							 focus:border-gray-400 focus:outline-none focus:ring-0"
+								on:click|preventDefault={() => {
+									settings.descriptionRegex.push('');
+									settings.descriptionRegex = settings.descriptionRegex;
+								}}
+							>
+								Add regex
+							</button></Tooltip
+						>
+					</div>
+				</div>
+
+				<div class="flex flex-col justify-start gap-4">
+					<Select label="Amount column" options={fullHeader} bind:selected={settings.amountCol} />
+					<Checkbox label="Spendings are negative" bind:checked={settings.spendingsNegative} />
+					<Checkbox
+						label="Ignore values of opposite sign"
+						bind:checked={settings.ignoreOppositeSign}
+					/>
+				</div>
 			</div>
-		</div>
+		{/if}
 		{#if selectedTag}
 			<div class="text-center pt-16">
 				<h1
@@ -324,56 +409,57 @@
 				</h1>
 			</div>
 		{/if}
-		<div bind:this={timeCanvas} class="pt-16">
+		<div bind:this={timeCanvas} class={`pt-16 ${loaded ? null : 'hidden'}`}>
 			<slot />
 		</div>
-		<div bind:this={chartCanvas} class="pt-16">
+		<div bind:this={chartCanvas} class={`pt-16 ${loaded ? null : 'hidden'}`}>
 			<slot />
 		</div>
-
-		<div class="pt-16">
-			<div class="not-prose relative bg-slate-50 rounded-xl overflow-hidden dark:bg-slate-800/25">
-				<div
-					style="background-position:10px 10px"
-					class="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.5))]"
-				/>
-				<div class="relative rounded-xl overflow-auto">
-					<div class="shadow-sm overflow-hidden my-8">
-						<table class="border-collapse table-auto w-full">
-							<thead>
-								<tr>
-									{#each header as col}
-										<th
-											class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-800 dark:text-slate-200 text-left"
-											>{col}</th
-										>
-									{/each}
-								</tr>
-							</thead>
-							<tbody class="bg-white dark:bg-slate-800">
-								{#each fullCSV as row}
-									<tr
-										>{#each row.slice(0, 3) as col}
-											<td
-												class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400"
-												>{col}</td
+		{#if loaded}
+			<div class="pt-16">
+				<div class="not-prose relative bg-slate-50 rounded-xl overflow-hidden dark:bg-slate-800/25">
+					<div
+						style="background-position:10px 10px"
+						class="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.5))]"
+					/>
+					<div class="relative rounded-xl overflow-auto">
+						<div class="shadow-sm overflow-hidden my-8">
+							<table class="border-collapse table-auto w-full">
+								<thead>
+									<tr>
+										{#each header as col}
+											<th
+												class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-800 dark:text-slate-200 text-left"
+												>{col}</th
 											>
 										{/each}
-										<td
-											class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400"
-											><Tags bind:tags={tags[row[descriptionPos]]} /></td
-										></tr
-									>
-								{/each}
-							</tbody>
-						</table>
+									</tr>
+								</thead>
+								<tbody class="bg-white dark:bg-slate-800">
+									{#each fullCSV as row}
+										<tr
+											>{#each row.slice(0, 3) as col}
+												<td
+													class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400"
+													>{col}</td
+												>
+											{/each}
+											<td
+												class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400"
+												><Tags bind:tags={tags[row[descriptionPos]]} /></td
+											></tr
+										>
+									{/each}
+								</tbody>
+							</table>
+						</div>
 					</div>
+					<div
+						class="absolute inset-0 pointer-events-none border border-black/5 rounded-xl dark:border-white/5"
+					/>
 				</div>
-				<div
-					class="absolute inset-0 pointer-events-none border border-black/5 rounded-xl dark:border-white/5"
-				/>
 			</div>
-		</div>
+		{/if}
 	</div>
 </main>
 

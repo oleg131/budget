@@ -8,7 +8,8 @@
 		"preview": "vite preview",
 		"test": "playwright test",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write .",
+		"deploy": "gh-pages -d build"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",

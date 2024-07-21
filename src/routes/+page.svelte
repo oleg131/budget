@@ -15,7 +15,8 @@
 	const datePos = 0;
 	const descriptionPos = 1;
 	const amountPos = 2;
-	const header = ['Date', 'Description', 'Amount', 'Tags'];
+	const originalDescriptionPos = 3;
+	const header = ['Date', 'Description (click to (un)ignore)', 'Amount', 'Tags'];
 
 	const DEFAULT_FULL_CSV = [
 		['8/21/2022', 'Ext Credit Card Debit MAGGY MAID               TUSTIN       CA', '187.00'],
@@ -98,7 +99,7 @@
 	function getParsedSV(fullCSV, selectedTag) {
 		let parsedCSV = _.cloneDeep(fullCSV);
 
-		if (!!selectedTag) {
+		if (selectedTag) {
 			parsedCSV = parsedCSV.filter((row) => {
 				const name = row[descriptionPos];
 				const nameTags = tags[name] || [];
@@ -129,7 +130,7 @@
 	}
 
 	function getChartJSON(tags, parsedCSV) {
-		const csvData = [];
+		let csvData = [];
 
 		for (const [entry, tagsArray] of Object.entries(tags)) {
 			for (const row of parsedCSV) {
@@ -146,6 +147,12 @@
 			if (!nameTags || !nameTags.length) {
 				csvData.push([null, row[descriptionPos], row[amountPos], 'undefined']);
 			}
+		}
+
+		csvData = csvData.filter((row) => !isIgnored(row[descriptionPos]));
+
+		if (selectedTag) {
+			csvData = csvData.filter((row) => row[3] == selectedTag);
 		}
 
 		const amountsByTag = Object.fromEntries(
@@ -227,6 +234,8 @@
 
 	function getTimeJSON(parsedCSV) {
 		let csvData = _.cloneDeep(parsedCSV);
+
+		csvData = csvData.filter((row) => !isIgnored(row[descriptionPos]));
 
 		csvData.forEach((row) => {
 			row[0] = row[0].getTime();
@@ -323,6 +332,28 @@
 	});
 
 	$: parsedCSV = getParsedSV(fullCSV, selectedTag);
+
+	function toggleIgnore(description) {
+		if (!settings.ignoreDescriptions) {
+			settings.ignoreDescriptions = [];
+			settings.ignoreDescriptions.push(description);
+			console.log('ignore empty, add');
+		} else {
+			let index = settings.ignoreDescriptions.indexOf(description);
+			if (index !== -1) {
+				settings.ignoreDescriptions.splice(index, 1);
+				console.log('remove from ignore');
+			} else {
+				settings.ignoreDescriptions.push(description);
+				console.log('add to ignore');
+			}
+		}
+		settings.ignoreDescriptions = settings.ignoreDescriptions;
+	}
+
+	function isIgnored(description) {
+		return settings.ignoreDescriptions && settings.ignoreDescriptions.includes(description);
+	}
 </script>
 
 <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900">
@@ -364,21 +395,25 @@
 							/>
 						{/each}
 
-						<Tooltip
-							text="Apply regex to the description. New description will be the concatenation of all capturing groups. E.g. &quot;.*(COMPANY NAME)&quot;."
-							><button
-								type="button"
-								class="w-auto cursor-pointer space-x-1 rounded-full border border-gray-200 bg-white
+						<button
+							type="button"
+							class="w-auto cursor-pointer space-x-1 rounded-full border border-gray-200 bg-white
 							px-4 py-2 text-sm font-medium text-gray-800 transition hover:border-gray-400
 							 focus:border-gray-400 focus:outline-none focus:ring-0"
-								on:click|preventDefault={() => {
-									settings.descriptionRegex.push('');
-									settings.descriptionRegex = settings.descriptionRegex;
-								}}
-							>
-								Add regex
-							</button></Tooltip
+							on:click|preventDefault={() => {
+								settings.descriptionRegex.push('');
+								settings.descriptionRegex = settings.descriptionRegex;
+							}}
 						>
+							Add regex
+						</button>
+						<div class="text-xs text-gray-400">
+							Apply regex to the description. New description will be the concatenation of all
+							capturing groups. Use backslash to escape special characters.<br /><br /> This is
+							useful, if you want to apply same tag to multiple transactions of similar form.<br
+							/><br />For example, if you have transactions "LYFT FRI 7PM", "LYFT SUN 1AM" etc, you
+							can add regex "(LYFT).*", and all those transaction would be treated as being "LYFT"
+						</div>
 					</div>
 				</div>
 
@@ -394,7 +429,7 @@
 		{/if}
 		{#if selectedTag}
 			<div class="text-center pt-16">
-				<h1
+				<div
 					class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
 				>
 					Selected tag: <span
@@ -406,7 +441,8 @@
 							selectedTag = undefined;
 						}}>{selectedTag}</span
 					>
-				</h1>
+				</div>
+				<span class="text-sm text-gray-400">(click to remove)</span>
 			</div>
 		{/if}
 		<div bind:this={timeCanvas} class={`pt-16 ${loaded ? null : 'hidden'}`}>
@@ -438,11 +474,17 @@
 								<tbody class="bg-white dark:bg-slate-800">
 									{#each fullCSV as row}
 										<tr
-											>{#each row.slice(0, 3) as col}
+											>{#each row.slice(0, 3) as col, index}
 												<td
-													class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400"
-													>{col}</td
-												>
+													class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400 whitespace-pre-wrap"
+													><span
+														on:click={() => toggleIgnore(col)}
+														on:keydown={() => toggleIgnore(col)}
+														class:hover:underline={parseInt(index) === descriptionPos}
+														class:cursor-pointer={parseInt(index) === descriptionPos}
+														class:line-through={isIgnored(col)}>{col}</span
+													>
+												</td>
 											{/each}
 											<td
 												class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-600 dark:text-slate-400"

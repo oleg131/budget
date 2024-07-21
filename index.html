@@ -6,16 +6,16 @@
 		<link rel="icon" href="./favicon.png" />
 		<meta name="viewport" content="width=device-width" />
 		<meta http-equiv="content-security-policy" content="">
-		<link href="./_app/immutable/assets/_layout-0ff41ec0.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/_layout-027c286b.css" rel="stylesheet">
 		<link href="./_app/immutable/assets/_page-88007d75.css" rel="stylesheet">
-		<link rel="modulepreload" href="./_app/immutable/start-9339030d.js">
+		<link rel="modulepreload" href="./_app/immutable/start-a31a8e12.js">
 		<link rel="modulepreload" href="./_app/immutable/chunks/index-21880e9a.js">
 		<link rel="modulepreload" href="./_app/immutable/chunks/singletons-2b5f5a05.js">
 		<link rel="modulepreload" href="./_app/immutable/chunks/index-10c5655c.js">
-		<link rel="modulepreload" href="./_app/immutable/components/pages/_layout.svelte-8e4012ae.js">
+		<link rel="modulepreload" href="./_app/immutable/components/pages/_layout.svelte-db365490.js">
 		<link rel="modulepreload" href="./_app/immutable/modules/pages/_layout.js-9cbb603b.js">
 		<link rel="modulepreload" href="./_app/immutable/chunks/_layout-da46b06b.js">
-		<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-24787722.js">
+		<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-17379361.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">
@@ -24,7 +24,7 @@
 <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900"><div class="flex flex-col justify-between px-4 mx-auto max-w-screen-xl "><p class="text-center mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">This app lets you breakdown your credit card transaction by assigned tags.<br>
 			<small>Assigned tags are stored in the browser locally. </small></p>
 
-		<div class="flex items-center justify-center w-full"><label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"><div class="flex flex-col items-center justify-center pt-5 pb-6"><svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+		<div class="flex items-center justify-center w-full"><label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"><div class="flex flex-col items-center justify-center pt-5 pb-6"><svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
 			<p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload a CSV file</span> or drag and drop
 			</p>
 			<p class="text-xs text-gray-500 dark:text-gray-400">Comma-separated file with a header</p></div>
@@ -42,10 +42,13 @@
 
 					<div class="flex flex-col items-center justify-center gap-4">
 
-						<div class="relative"><div class="focus:outline-none"><button type="button" class="w-auto cursor-pointer space-x-1 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 transition hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">Add regex
-							</button></div>
-
-	</div></div></div>
+						<button type="button" class="w-auto cursor-pointer space-x-1 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 transition hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">Add regex
+						</button>
+						<div class="text-xs text-gray-400">Apply regex to the description. New description will be the concatenation of all
+							capturing groups. Use backslash to escape special characters.<br><br> This is
+							useful, if you want to apply same tag to multiple transactions of similar form.<br><br>For example, if you have transactions &quot;LYFT FRI 7PM&quot;, &quot;LYFT SUN 1AM&quot; etc, you
+							can add regex &quot;(LYFT).*&quot;, and all those transaction would be treated as being &quot;LYFT&quot;
+						</div></div></div>
 
 				<div class="flex flex-col justify-start gap-4"><div><label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount column</label>
 
@@ -63,14 +66,14 @@
 </main>
 
 
-		<script type="module" data-sveltekit-hydrate="17qcl42">
-			import { start } from "./_app/immutable/start-9339030d.js";
+		<script type="module" data-sveltekit-hydrate="1fri0cb">
+			import { start } from "./_app/immutable/start-a31a8e12.js";
 
 			start({
 				env: {},
 				paths: {"assets":"","base":""},
-				target: document.querySelector('[data-sveltekit-hydrate="17qcl42"]').parentNode,
-				version: "1691279529055",
+				target: document.querySelector('[data-sveltekit-hydrate="1fri0cb"]').parentNode,
+				version: "1721528161456",
 				hydrate: {
 					node_ids: [0, 2],
 					data: [null,null],
